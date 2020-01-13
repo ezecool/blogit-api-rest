@@ -20,3 +20,5 @@ $router->get('/saludo', function() {
 });
 
 $router->get('/users', ['uses' => 'UsersController@index']);
+$router->post('/users', ['uses' => 'UsersController@createUser']);
+$router->post('/users/login', ['uses' => 'UsersController@getToken']);
