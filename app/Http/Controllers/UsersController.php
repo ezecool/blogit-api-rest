@@ -15,7 +15,7 @@ class UsersController extends Controller
         // $usuario = new User();
         // $usuario->name = 'Hernan';
         // $usuario->email = 'hernan@email.com';
-      
+
       if ($request->isJson()) {
         $users = User::all();
         return response()->json($users, 200);
@@ -35,12 +35,27 @@ class UsersController extends Controller
           'password' => Hash::make($data['password']),
           'api_token' => Str::random(60)
         ]);
-        
+
         // Si el recurso se creo exitosamente, devuelvo el usuario en formato json y el coddigo 201 (recurso creado)
         return response()->json($usuario, 201);
       }
 
       return response()->json(['error' => 'No autorizado'], 401, []);
+    }
+
+    public function getUser(Request $request, $id) {
+        if ($request->isJson()) {
+
+            try {
+                $user = User::with(['issues_assigned_to_me', 'issues_reported_to_me'])->findOrFail($id);
+
+                return response()->json($user, 200);
+            } catch (ModelNotFoundException $e) {
+                return response()->json(['error' => 'No content'], 406);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401, []);
+        }
     }
 
     function getToken(Request $peticion) {
@@ -55,10 +70,10 @@ class UsersController extends Controller
           if ($usuario && Hash::check($data['password'], $usuario->password)) {
             return response()->json($usuario, 200);
           } else {
-            return response()->json(['error' => 'Acceso incorrecto'], 406);
+                return response()->json(['error' => 'Acceso incorrecto'], 406);
           }
         } catch (ModelNotFoundException $e) {
-          return response()->json(['error' => 'Acceso incorrecto'], 406);
+            return response()->json(['error' => 'Acceso incorrecto'], 406);
         }
       }
     }

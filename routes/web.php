@@ -11,6 +11,8 @@
 |
 */
 
+$router->post('/users/login', ['uses' => 'UsersController@getToken']);
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
@@ -19,6 +21,10 @@ $router->get('/saludo', function() {
     return 'Hola!!!!!';
 });
 
-$router->get('/users', ['uses' => 'UsersController@index']);
-$router->post('/users', ['uses' => 'UsersController@createUser']);
-$router->post('/users/login', ['uses' => 'UsersController@getToken']);
+$router->group(['middleware' => ['auth']], function() use($router) {
+    $router->get('/users', ['uses' => 'UsersController@index']);
+    $router->post('/users', ['uses' => 'UsersController@createUser']);
+
+    $router->get('/users/{id}', ['uses' => 'UsersController@getUser']);
+});
+
