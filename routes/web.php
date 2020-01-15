@@ -21,10 +21,17 @@ $router->get('/saludo', function() {
     return 'Hola!!!!!';
 });
 
+$router->post('/users', ['uses' => 'UsersController@createUser']);
+
 $router->group(['middleware' => ['auth']], function() use($router) {
     $router->get('/users', ['uses' => 'UsersController@index']);
-    $router->post('/users', ['uses' => 'UsersController@createUser']);
-
     $router->get('/users/{id}', ['uses' => 'UsersController@getUser']);
 });
 
+$router->options('/users' function() {
+	header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+	header('Access-Control-Allow-Origin: *'); 
+	header("Access-Control-Allow-Credentials: true");
+	header('Access-Control-Max-Age: 1000');
+	header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');	
+});
