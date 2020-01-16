@@ -26,8 +26,21 @@ class UsersController extends Controller
 
     function createUser(Request $peticion) {
 
+      //$usuario = User::create([
+      //  'name' => 'Juan Perez',
+      //  'username' => 'jpere',
+      //  'email' => 'jperez@empresa.com',
+      //  'password' => Hash::make('123456'),
+      //  'api_token' => Str::random(60)
+      //]);
+
+      //return response()->json([], 201);
+
       if ($peticion->isJson()) {
-        $data = $peticion->json()->all(); // Tomo todos los datos de la peticion
+
+        // Tomo todos los datos de la peticion
+        $data = $peticion->json()->all();
+
         $usuario = User::create([
           'name' => $data['name'],
           'username' => $data['username'],
@@ -38,6 +51,7 @@ class UsersController extends Controller
 
         // Si el recurso se creo exitosamente, devuelvo el usuario en formato json y el coddigo 201 (recurso creado)
         return response()->json($usuario, 201);
+
       }
 
       return response()->json(['error' => 'No autorizado'], 401, []);
