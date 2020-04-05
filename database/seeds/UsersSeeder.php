@@ -21,5 +21,21 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('jperez'),
             'api_token' => Str::random(60)
         ]);
+
+        DB::table('users')->insert([
+            'name' => 'Pablo Chacon',
+            'username' => 'pchacon',
+            'email' => 'pchacon@email.com',
+            'password' => Hash::make('pchacon'),
+            'api_token' => Str::random(60)
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Lucia Mercado',
+            'username' => 'lucham',
+            'email' => 'lucham@email.com',
+            'password' => Hash::make('lucham'),
+            'api_token' => Str::random(60)
+        ]);
     }
 }
